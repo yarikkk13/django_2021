@@ -7,10 +7,12 @@
 <body>
 <h2>hello world</h2>
 <div>
-    <p>{{ a }}</p>
-    <p>{{ b }}</p>
-    <p>{{ c }}</p>
-    <p>{{ symbol }}</p>
+    {% if symbol == 'div' and '/' and '*' and '-' and '+' %}
+        <h3>{{ a }}{{ symbol }}{{ b }}={{ c }}</h3>
+    {% else %}
+        <h3>{{ c }}</h3>
+    {% endif %}
+
 </div>
 </body>
 </html>

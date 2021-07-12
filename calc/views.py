@@ -9,10 +9,13 @@ def home(request):
 def mathematics(request, a, symbol, b):
     if symbol == 'div':
         c = a / b
+        symbol = '/'
     if symbol == '*':
         c = a * b
     if symbol == '+':
         c = a + b
     if symbol == '-':
         c = a - b
-    return render(request, 'index.html', {c: c, a: a, b: b, symbol: symbol})
+    else:
+        c = 'wrong'
+    return render(request, 'index.html', {'c': c, 'a': a, 'b': b, 'symbol': symbol})
