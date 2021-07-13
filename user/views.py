@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import status
 from rest_framework.response import Response
 
 from rest_framework.views import APIView
@@ -39,3 +40,39 @@ class UserCreateListView(APIView):
     def post(self, *args, **kwargs):
         body = self.request.data
         serializer = UserSerializer(data=body)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        serializer.save()
+        return Response(serializer.data)
+
+
+class RetrieveDeleteView(APIView):
+    def get(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        try:
+            data = UserModel.objects.get(pk=pk)
+        except Exception as e:
+            return Response('not found')
+        serializer = UserSerializer(data)
+        return Response(serializer.data)
+
+    def delete(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        try:
+            data = UserModel.objects.get(pk=pk)
+        except Exception as e:
+            return Response('not found')
+        data.delete()
+        return Response('delete')
+
+    def patch(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        body = self.request.data
+        try:
+            data = UserModel.objects.get(pk=pk)
+        except Exception:
+            return Response('Not Found', status.HTTP_404_NOT_FOUND)
+        serializer = UserSerializer(data, data=body, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_202_ACCEPTED)
